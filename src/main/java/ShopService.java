@@ -8,8 +8,8 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 public class ShopService {
-    private final ProductRepo productRepo = new ProductRepo();
-    private final OrderRepo orderRepo = new OrderMapRepo();
+    private final ProductRepo productRepo;
+    private final OrderRepo orderRepo;
 
     public Order addOrder(List<String> productIds) throws  IllegalArgumentException{
         List<Product> products = new ArrayList<>();
@@ -32,6 +32,10 @@ public class ShopService {
 
     public void updateOrder(String orderID, OrderStatus status) {
         orderRepo.updateOrder(orderID, status);
+    }
+
+    public Product addProduct(Product newProduct) {
+        return productRepo.addProduct(newProduct);
     }
 }
 
