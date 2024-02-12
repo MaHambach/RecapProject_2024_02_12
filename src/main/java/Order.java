@@ -1,15 +1,15 @@
 import lombok.With;
 
+import java.time.Instant;
 import java.util.List;
 
 @With
 public record Order(
         String id,
         OrderStatus status,
-        List<Product> products
+        List<Product> products,
+
+        Instant orderDate
 ) {
 
-    public Order(String id, List<Product> products) {
-        this(id, OrderStatus.PROCESSING, products);
-    }
 }
