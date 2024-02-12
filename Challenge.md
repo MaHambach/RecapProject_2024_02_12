@@ -21,7 +21,7 @@ Upload the project as a new repository on GitHub to one of your own GitHub accou
 The sample solution is now the main branch of your GitHub repository.
 
 What is the link to your GitHub repository?
-`inputfield`
+`https://github.com/MaHambach/RecapProject_2024_02_12.git`
 
 ## Coding: Order Status
 
@@ -30,7 +30,7 @@ Add an order status to the Order (PROCESSING, IN_DELIVERY, COMPLETED) to determi
 To do this, create a new branch, create and push the commits, create a pull request, review the PR, and merge it into the main branch.
 
 What is the link to your pull request?
-`inputfield`
+`https://github.com/MaHambach/RecapProject_2024_02_12/pull/2`
 
 ## Coding: Order Status
 

@@ -26,4 +26,11 @@ public class OrderMapRepo implements OrderRepo{
     public void removeOrder(String id) {
         orders.remove(id);
     }
+
+    @Override
+    public List<Order> getAllOrdersWithStatus(OrderStatus status) {
+        return orders.values().stream()
+                .filter(order -> order.status().equals(status))
+                .toList();
+    }
 }
