@@ -10,7 +10,8 @@ public class Main {
         productRepo.addProduct(new Product("5", "Taschenrechner"));
 
         OrderMapRepo orderMapRepo = new OrderMapRepo();
-        ShopService shopService = new ShopService(productRepo, orderMapRepo);
+        IdService idService = new IdService();
+        ShopService shopService = new ShopService(productRepo, orderMapRepo, idService);
         shopService.addOrder(List.of("1", "2", "3", "4", "5"));
         shopService.addOrder(List.of("1", "1", "1", "4", "4"));
         shopService.addOrder(List.of("2", "2", "2", "4", "5"));

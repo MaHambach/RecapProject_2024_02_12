@@ -15,12 +15,16 @@ public record Order(
 ) {
     @Override
     public String toString() {
-
-        return String.format("Order{id='%s', status=%11s, orderDate=%s, products=%s}",
+        String string = String.format("Order{id='%s', status=%11s, orderDate=%s, products=[",
                 id,
                 status,
-                LocalDateTime.ofInstant(orderDate, ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")),
-                products
+                LocalDateTime.ofInstant(orderDate, ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))
         );
+        for (Product product : products) {
+            string += product.name() + ", ";
+        }
+        string = string.substring(0, string.length() - 2);
+        string += "]}";
+        return string;
     }
 }
