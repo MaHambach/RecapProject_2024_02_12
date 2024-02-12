@@ -11,8 +11,15 @@ public class Main {
 
         OrderMapRepo orderMapRepo = new OrderMapRepo();
         ShopService shopService = new ShopService(productRepo, orderMapRepo);
+        shopService.addOrder(List.of("1", "2", "3", "4", "5"));
+        shopService.addOrder(List.of("1", "1", "1", "4", "4"));
+        shopService.addOrder(List.of("2", "2", "2", "4", "5"));
 
+        List<Order> orders = shopService.getAllOrdersWithStatus(OrderStatus.PROCESSING);
 
+        for(Order order : orders){
+            System.out.println(order);
+        }
 
     }
 }

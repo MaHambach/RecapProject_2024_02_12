@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+
 @RequiredArgsConstructor
 public class ShopService {
     private final ProductRepo productRepo;
@@ -21,9 +22,14 @@ public class ShopService {
             products.add(productToOrder.get());
         }
 
-        Order newOrder = new Order(UUID.randomUUID().toString(), OrderStatus.PROCESSING, products, Instant.now());
+        Order newOrder = new Order(UUID.randomUUID().toString(), OrderStatus.PROCESSING, Instant.now(), products);
 
         return orderRepo.addOrder(newOrder);
+    }
+
+    public ShopService(){
+        this.productRepo = new ProductRepo();
+        this.orderRepo = new OrderMapRepo();
     }
 
     public List<Order> getAllOrdersWithStatus(OrderStatus status) {
