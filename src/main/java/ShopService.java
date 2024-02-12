@@ -25,6 +25,10 @@ public class ShopService {
     public List<Order> getAllOrdersWithStatus(OrderStatus status) {
         return orderRepo.getAllOrdersWithStatus(status);
     }
+
+    public void updateOrder(String orderID, OrderStatus status) {
+        orderRepo.updateOrder(orderID, status);
+    }
 }
 
 

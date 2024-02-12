@@ -11,4 +11,6 @@ public interface OrderRepo {
     void removeOrder(String id);
 
     List<Order> getAllOrdersWithStatus(OrderStatus status);
+
+    void updateOrder(String orderID, OrderStatus status);
 }

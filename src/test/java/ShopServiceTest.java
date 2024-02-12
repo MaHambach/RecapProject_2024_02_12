@@ -28,9 +28,8 @@ class ShopServiceTest {
         List<String> productsIds = List.of("1", "2");
 
         //WHEN
-        Order actual = shopService.addOrder(productsIds);
 
         //THEN
-        assertNull(actual);
+        assertThrows(IllegalArgumentException.class, () -> shopService.addOrder(productsIds));
     }
 }

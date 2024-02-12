@@ -33,4 +33,12 @@ public class OrderMapRepo implements OrderRepo{
                 .filter(order -> order.status().equals(status))
                 .toList();
     }
+
+    @Override
+    public void updateOrder(String orderID, OrderStatus status) {
+        Order order = getOrderById(orderID);
+        order = order.withStatus(status);
+        removeOrder(orderID);
+        addOrder(order);
+    }
 }
