@@ -35,6 +35,10 @@ public class Main {
 //            System.out.printf("Älteste Bestellung mit Status %11s: %s%n", status, oldestOrderPerStatus.get(status));
 //        }
 
-        shopService.readFromFile("src/transactions.txt");
+        shopService.executeFromFile("src/transactions.txt");
+        System.out.println();
+        System.out.println("Alle Bestellungen:");
+        shopService.printOrders();
+        //shopService.readFromFile("src/transactions.txt");
     }
 }

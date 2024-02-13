@@ -133,6 +133,88 @@ public class ShopService {
             default -> System.out.println("Ungültiger Befehl: " + input);
         }
     }
+
+    public void executeFromFile(String fileName) {
+        Path path = Paths.get(fileName);
+        try {
+            String[] lines = Files.readAllLines(path).toArray(new String[0]);
+
+            Map<String, String> orderIds = new HashMap<>();
+            Map<String, String> productIds = new HashMap<>();
+
+            for (int i = 0; i < lines.length; i++) {
+                String input = lines[i];
+                String[] inputCommand = input.split(" ");
+                switch (inputCommand[0]) {
+                    case "addProduct" -> {
+                        // Der Input sollte die folgende Form haben: addProduct <productName>
+                        Product newProduct = addProduct(inputCommand[1]);
+                        System.out.println("Füge Produkt " + inputCommand[1] + " mit der ID " + newProduct.id() + " hinzu.");
+                        productIds.put(inputCommand[1], newProduct.id());
+                    }
+                    case "addOrder" -> {
+                        // Der Input sollte die folgende Form haben: addOrder <orderId> <productId1> <productId2> ...
+                        System.out.println(
+                                "Füge Bestellung \'"
+                                        + inputCommand[1]
+                                        + "\' mit den Produkten "
+                                        + Arrays.asList(inputCommand).subList(2, inputCommand.length)
+                                        + " hinzu."
+                        );
+                        Order newOrder = addOrder(Arrays.asList(inputCommand).subList(2, inputCommand.length));
+                        orderIds.put(inputCommand[1], newOrder.id());
+                    }
+                    case "getAllOrdersWithStatus" -> {
+                        // Der Input sollte die folgende Form haben: getAllOrdersWithStatus <status>
+                        List<Order> orders = getAllOrdersWithStatus(OrderStatus.valueOf(inputCommand[1]));
+                        for (Order order : orders) {
+                            System.out.println(order.withId(orderIds.get(order.id())));
+                        }
+                    }
+                    case "getOldestOrderPerStatus" -> {
+                        // Der Input sollte die folgende Form haben: getOldestOrderPerStatus
+                        Map<OrderStatus, Order> oldestOrderPerStatus = getOldestOrderPerStatus();
+                        for (OrderStatus orderStatus : OrderStatus.values()) {
+                            Order oldestOrderWithStatus = oldestOrderPerStatus.get(orderStatus);
+                            System.out.println(
+                                    "Älteste Bestellung mit Status \'"
+                                            + orderStatus
+                                            + "\': "
+                                            + oldestOrderWithStatus.withId(orderIds.get(oldestOrderWithStatus.id()))
+                                            + "\'."
+                            );
+                        }
+                    }
+                    case "setStatus" -> {
+                        System.out.println("Setze Status von Bestellung \'" + inputCommand[1] + "\' auf \'" + inputCommand[2] + "\'.");
+                        updateOrder(orderIds.get(inputCommand[1]), OrderStatus.valueOf(inputCommand[2]));
+                    }
+                    case "printOrders" -> {
+                        for (OrderStatus orderStatus : OrderStatus.values()) {
+                            System.out.println("Bestellungen mit Status " + orderStatus + ":");
+                            List<Order> orders = getAllOrdersWithStatus(orderStatus);
+                            for (Order order : orders) {
+                                System.out.println(order.withId(orderIds.get(order.id())));
+                            }
+                        }
+                    }
+                    default -> System.out.println("Ungültiger Befehl: " + input);
+                }
+            }
+            Files.readAllLines(path).forEach(this::commandLineExecute);
+        } catch (IOException e) {
+            System.err.println("Fehler beim Lesen der Datei: " + e.getMessage());
+        }
+    }
+
+    public void printOrders() {
+        for (OrderStatus orderStatus : OrderStatus.values()) {
+            List<Order> orders = getAllOrdersWithStatus(orderStatus);
+            for (Order order : orders) {
+                System.out.println(order);
+            }
+        }
+    }
 }
 
 
