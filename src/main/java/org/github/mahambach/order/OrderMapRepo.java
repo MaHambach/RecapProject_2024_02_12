@@ -1,6 +1,8 @@
+package org.github.mahambach.order;
+
 import java.util.*;
 
-public class OrderMapRepo implements OrderRepo{
+public class OrderMapRepo implements OrderRepo {
     private Map<String, Order> orders = new HashMap<>();
 
     @Override

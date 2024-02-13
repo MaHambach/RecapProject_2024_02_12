@@ -1,4 +1,7 @@
+package org.github.mahambach.order;
+
 import lombok.With;
+import org.github.mahambach.product.Product;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

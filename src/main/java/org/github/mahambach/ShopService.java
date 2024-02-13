@@ -1,6 +1,15 @@
+package org.github.mahambach;
+
 import lombok.RequiredArgsConstructor;
+import org.github.mahambach.order.Order;
+import org.github.mahambach.order.OrderMapRepo;
+import org.github.mahambach.order.OrderRepo;
+import org.github.mahambach.order.OrderStatus;
+import org.github.mahambach.product.Product;
+import org.github.mahambach.product.ProductRepo;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,7 +33,7 @@ public class ShopService {
             products.add(productToOrder.get());
         }
 
-        Order newOrder = new Order(UUID.randomUUID().toString(), OrderStatus.PROCESSING, Instant.now(), products);
+        Order newOrder = new Order(idService.generateId().toString(), OrderStatus.PROCESSING, Instant.now(), products);
 
         return orderRepo.addOrder(newOrder);
     }
@@ -58,8 +67,9 @@ public class ShopService {
         orderRepo.updateOrder(orderID, status);
     }
 
-    public Product addProduct(Product newProduct) {
-        return productRepo.addProduct(newProduct);
+    public Product addProduct(String productName) {
+        // TODO: Hinzufügen von price und stock.
+        return productRepo.addProduct(new Product(idService.generateId().toString(), productName));
     }
 
     public Map<OrderStatus, Order> getOldestOrderPerStatus() {
@@ -80,45 +90,47 @@ public class ShopService {
 
     public void commandLineExecute(String input) {
         String[] inputCommand = input.split(" ");
-        if (inputCommand[0].equals("addProduct")) {
-            String id = idService.generateId().toString();
-            System.out.println("Füge Produkt " + inputCommand[1] + " mit der ID " + id + " hinzu.");
-            Product newProduct = new Product(id, inputCommand[1]);
-            addProduct(newProduct);
-
-        } else if (inputCommand[0].equals("addOrder")) {
-            System.out.println(
-                    "Füge Bestellung \'"
-                            + inputCommand[1]
-                            + "\' mit den Produkten "
-                            + Arrays.asList(inputCommand).subList(2, inputCommand.length)
-                            + " hinzu."
-            );
-            addOrder(inputCommand[1], Arrays.asList(inputCommand).subList(2, inputCommand.length));
-
-        } else if (inputCommand[0].equals("getAllOrdersWithStatus")) {
-            List<Order> orders = getAllOrdersWithStatus(OrderStatus.valueOf(inputCommand[1]));
-            for (Order order : orders) {
-                System.out.println(order);
+        switch (inputCommand[0]) {
+            case "addProduct" -> {
+                Product newProduct = addProduct(inputCommand[1]);
+                System.out.println("Füge Produkt " + inputCommand[1] + " mit der ID " + newProduct.id() + " hinzu.");
             }
-
-        } else if (inputCommand[0].equals("getOldestOrderPerStatus")) {
-            Map<OrderStatus, Order> oldestOrderPerStatus = getOldestOrderPerStatus();
-            for (OrderStatus orderStatus : OrderStatus.values()) {
-                System.out.println("Älteste Bestellung mit Status \'" + orderStatus + "\': " + oldestOrderPerStatus.get(orderStatus) +"\'.");
+            case "addOrder" -> {
+                System.out.println(
+                        "Füge Bestellung \'"
+                                + inputCommand[1]
+                                + "\' mit den Produkten "
+                                + Arrays.asList(inputCommand).subList(2, inputCommand.length)
+                                + " hinzu."
+                );
+                addOrder(inputCommand[1], Arrays.asList(inputCommand).subList(2, inputCommand.length));
             }
-        } else if (inputCommand[0].equals("setStatus")){
-            System.out.println("Setze Status von Bestellung \'" + inputCommand[1] + "\' auf \'" + inputCommand[2] + "\'.");
-            updateOrder(inputCommand[1], OrderStatus.valueOf(inputCommand[2]));
-
-        } else if (inputCommand[0].equals("printOrders")){
-            for(OrderStatus orderStatus : OrderStatus.values()){
-                System.out.println("Bestellungen mit Status " + orderStatus + ":");
-                List<Order> orders = getAllOrdersWithStatus(orderStatus);
-                for(Order order : orders){
+            case "getAllOrdersWithStatus" -> {
+                List<Order> orders = getAllOrdersWithStatus(OrderStatus.valueOf(inputCommand[1]));
+                for (Order order : orders) {
                     System.out.println(order);
                 }
             }
+            case "getOldestOrderPerStatus" -> {
+                Map<OrderStatus, Order> oldestOrderPerStatus = getOldestOrderPerStatus();
+                for (OrderStatus orderStatus : OrderStatus.values()) {
+                    System.out.println("Älteste Bestellung mit Status \'" + orderStatus + "\': " + oldestOrderPerStatus.get(orderStatus) + "\'.");
+                }
+            }
+            case "setStatus" -> {
+                System.out.println("Setze Status von Bestellung \'" + inputCommand[1] + "\' auf \'" + inputCommand[2] + "\'.");
+                updateOrder(inputCommand[1], OrderStatus.valueOf(inputCommand[2]));
+            }
+            case "printOrders" -> {
+                for (OrderStatus orderStatus : OrderStatus.values()) {
+                    System.out.println("Bestellungen mit Status " + orderStatus + ":");
+                    List<Order> orders = getAllOrdersWithStatus(orderStatus);
+                    for (Order order : orders) {
+                        System.out.println(order);
+                    }
+                }
+            }
+            default -> System.out.println("Ungültiger Befehl: " + input);
         }
     }
 }

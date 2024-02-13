@@ -1,6 +1,8 @@
+package org.github.mahambach.order;
+
 import java.util.*;
 
-public class OrderListRepo implements OrderRepo{
+public class OrderListRepo implements OrderRepo {
     private List<Order> orders = new ArrayList<>();
 
     public List<Order> getOrders() {

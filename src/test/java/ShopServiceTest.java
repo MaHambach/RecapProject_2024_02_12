@@ -1,3 +1,7 @@
+import org.github.mahambach.order.Order;
+import org.github.mahambach.order.OrderStatus;
+import org.github.mahambach.product.Product;
+import org.github.mahambach.ShopService;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;

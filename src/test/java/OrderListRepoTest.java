@@ -1,3 +1,7 @@
+import org.github.mahambach.order.Order;
+import org.github.mahambach.order.OrderListRepo;
+import org.github.mahambach.order.OrderStatus;
+import org.github.mahambach.product.Product;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -52,14 +56,15 @@ class OrderListRepoTest {
         //GIVEN
         OrderListRepo repo = new OrderListRepo();
         Product product = new Product("1", "Apfel");
-        Order newOrder = new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product));
+        Instant now = Instant.now();
+        Order newOrder = new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product));
 
         //WHEN
         Order actual = repo.addOrder(newOrder);
 
         //THEN
         Product product1 = new Product("1", "Apfel");
-        Order expected = new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product));
+        Order expected = new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product));
         assertEquals(actual, expected);
         assertEquals(repo.getOrderById("1"), expected);
     }
@@ -81,7 +86,8 @@ class OrderListRepoTest {
         //GIVEN
         OrderListRepo repo = new OrderListRepo();
         Product product = new Product("1", "Apfel");
-        Order newOrder = new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product));
+        Instant now = Instant.now();
+        Order newOrder = new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product));
         repo.addOrder(newOrder);
 
         //WHEN
@@ -89,7 +95,7 @@ class OrderListRepoTest {
 
         //THEN
         Product product1 = new Product("1", "Apfel");
-        Order expected = new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product1));
+        Order expected = new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product1));
         assertEquals(repo.getOrderById("1"), expected);
     }
 }

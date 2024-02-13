@@ -1,3 +1,5 @@
+package org.github.mahambach.product;
+
 import lombok.With;
 
 @With

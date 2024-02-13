@@ -1,3 +1,5 @@
+import org.github.mahambach.product.Product;
+import org.github.mahambach.product.ProductRepo;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;

@@ -1,3 +1,7 @@
+package org.github.mahambach.product;
+
+import org.github.mahambach.product.Product;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

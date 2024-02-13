@@ -1,3 +1,7 @@
+import org.github.mahambach.order.Order;
+import org.github.mahambach.order.OrderMapRepo;
+import org.github.mahambach.order.OrderStatus;
+import org.github.mahambach.product.Product;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -12,9 +16,9 @@ class OrderMapRepoTest {
     void getOrders() {
         //GIVEN
         OrderMapRepo repo = new OrderMapRepo();
-
         Product product = new Product("1", "Apfel");
-        Order newOrder = new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product));
+        Instant now = Instant.now();
+        Order newOrder = new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product));
         repo.addOrder(newOrder);
 
         //WHEN
@@ -23,7 +27,7 @@ class OrderMapRepoTest {
         //THEN
         List<Order> expected = new ArrayList<>();
         Product product1 = new Product("1", "Apfel");
-        expected.add(new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product1)));
+        expected.add(new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product1)));
 
         assertEquals(actual, expected);
     }
@@ -32,17 +36,17 @@ class OrderMapRepoTest {
     void getOrderById() {
         //GIVEN
         OrderMapRepo repo = new OrderMapRepo();
-
         Product product = new Product("1", "Apfel");
-        Order newOrder = new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product));
+        Instant now = Instant.now();
+        Order newOrder = new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product));
         repo.addOrder(newOrder);
 
         //WHEN
-        Order actual = repo.getOrderById("1");
+        Order actual = repo.getOrderById("A");
 
         //THEN
         Product product1 = new Product("1", "Apfel");
-        Order expected = new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product1));
+        Order expected = new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product1));
 
         assertEquals(actual, expected);
     }
@@ -52,16 +56,17 @@ class OrderMapRepoTest {
         //GIVEN
         OrderMapRepo repo = new OrderMapRepo();
         Product product = new Product("1", "Apfel");
-        Order newOrder = new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product));
+        Instant now = Instant.now();
+        Order newOrder = new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product));
 
         //WHEN
         Order actual = repo.addOrder(newOrder);
 
         //THEN
         Product product1 = new Product("1", "Apfel");
-        Order expected = new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product1));
+        Order expected = new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product1));
         assertEquals(actual, expected);
-        assertEquals(repo.getOrderById("1"), expected);
+        assertEquals(repo.getOrderById("A"), expected);
     }
 
     @Test
@@ -81,15 +86,16 @@ class OrderMapRepoTest {
         //GIVEN
         OrderMapRepo repo = new OrderMapRepo();
         Product product = new Product("1", "Apfel");
-        Order newOrder = new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product));
+        Instant now = Instant.now();
+        Order newOrder = new Order("A", OrderStatus.PROCESSING, now, List.of(product));
         repo.addOrder(newOrder);
 
         //WHEN
-        repo.updateOrder("1", OrderStatus.IN_DELIVERY);
+        repo.updateOrder("A", OrderStatus.IN_DELIVERY);
 
         //THEN
         Product product1 = new Product("1", "Apfel");
-        Order expected = new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product1));
-        assertEquals(repo.getOrderById("1"), expected);
+        Order expected = new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product1));
+        assertEquals(repo.getOrderById("A"), expected);
     }
 }

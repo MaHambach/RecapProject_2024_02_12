@@ -1,5 +1,8 @@
-import java.util.List;
-import java.util.Map;
+package org.github.mahambach;
+
+import org.github.mahambach.order.OrderMapRepo;
+import org.github.mahambach.product.Product;
+import org.github.mahambach.product.ProductRepo;
 
 public class Main {
     public static void main(String[] args) {
