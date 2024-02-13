@@ -19,25 +19,19 @@ public class ShopService {
     private final OrderRepo orderRepo;
     private final IdService idService;
 
-    public Order addOrder(List<String> productIds, List<Integer> productQuantities) throws  IllegalArgumentException, OutOfStockException {
+    public Order addOrder(List<String> productIds, List<Integer> productQuantities) throws  IllegalArgumentException {
         if(productIds.size() != productQuantities.size()) {
             throw new IllegalArgumentException("Anzahl der Produkt-Ids stimmt nicht mit der Anzahl der Produktmengen überein!");
         }
         List<Product> products = new ArrayList<>();
-        try {
-            for (int i = 0; i < productIds.size(); i++) {
-                Product productToOrder = productRepo.getProductById(productIds.get(i)).orElseThrow(() -> new IllegalArgumentException("Product mit der Id: " + productIds.get(i) + " konnte nicht bestellt werden!"));
-                products.add(productToOrder.withQuantity(productToOrder.quantity() - productQuantities.get(i)));
+        for (int i = 0; i < productIds.size(); i++) {
+            int finalI = i;
+            Product productToOrder = productRepo.getProductById(productIds.get(i)).orElseThrow(() -> new IllegalArgumentException("Product mit der Id: " + productIds.get(finalI) + " konnte nicht bestellt werden!"));
+            try {
+                products.add(productToOrder.withQuantity(productQuantities.get(i)));
+            } catch (OutOfStockException e) {
+                System.out.println("Fehler: Nicht genügend '" + productToOrder.name() + "' auf Lager!");
             }
-        } catch (OutOfStockException e) {
-            throw new OutOfStockException("Fehler: Nicht genügend '" + productRepo.getProductById(productIds.get(0)).get().name() + "' auf Lager!");
-        }
-            Optional<Product> productToOrder = productRepo.getProductById(productId);
-            if (productToOrder.isEmpty()) {
-                throw new IllegalArgumentException("Product mit der Id: " + productId + " konnte nicht bestellt werden!");
-            }
-            products.add(productToOrder.get());
-
         }
 
         Order newOrder = new Order(idService.generateId().toString(), OrderStatus.PROCESSING, Instant.now(), products);

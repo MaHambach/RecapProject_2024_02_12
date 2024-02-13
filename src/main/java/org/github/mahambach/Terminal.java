@@ -9,10 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 public class Terminal {
@@ -60,7 +57,13 @@ public class Terminal {
                                 + Arrays.asList(inputCommand).subList(2, inputCommand.length)
                                 + " hinzu."
                 );
-                Order newOrder = shopService.addOrder(Arrays.asList(inputCommand).subList(2, inputCommand.length));
+                List<String> productIds = new ArrayList<>();
+                List<Integer> productQuantities = new ArrayList<>();
+                for (int i = 2; i < inputCommand.length; i=i+2) {
+                    productIds.add(productMapAliasToId.get(inputCommand[i]));
+                    productQuantities.add(i+1);
+                }
+                Order newOrder = shopService.addOrder(productIds, productQuantities);
                 orderMapAliasToId.put(inputCommand[1], newOrder.id());
                 orderMapIdToAlias.put(newOrder.id(), inputCommand[1]);
             }

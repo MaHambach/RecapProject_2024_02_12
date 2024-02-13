@@ -14,16 +14,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class ShopServiceTest {
 
     @Test
-    void addOrderTest() {
+    void addOrderTest_whenProductList_thenProductList() {
         //GIVEN
         ShopService shopService = new ShopService();
+        Product product = shopService.addProduct("Apfel", 5);
         List<String> productsIds = List.of("1");
-
+        List<Integer> productQuantities = List.of(5);
         //WHEN
-        Order actual = shopService.addOrder(productsIds);
+        Order actual = shopService.addOrder(productsIds, productQuantities);
 
         //THEN
-        Order expected = new Order("-1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(new Product("1", "Apfel", 5)));
+        Order expected = new Order("-1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product));
         assertEquals(expected.products(), actual.products());
         assertNotNull(expected.id());
     }
@@ -33,10 +34,10 @@ class ShopServiceTest {
         //GIVEN
         ShopService shopService = new ShopService();
         List<String> productsIds = List.of("1", "2");
-
+        List<Integer> productQuantities = List.of(5, 5);
         //WHEN
 
         //THEN
-        assertThrows(IllegalArgumentException.class, () -> shopService.addOrder(productsIds));
+        assertThrows(IllegalArgumentException.class, () -> shopService.addOrder(productsIds,productQuantities));
     }
 }
