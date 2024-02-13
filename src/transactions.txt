@@ -1,4 +1,14 @@
 addOrder A 1 2 3
 addOrder B 4 1
+addOrder C 2 3 4
+addOrder D 1 2 3 4
+addOrder E 1 2 3 4
 setStatus A COMPLETED
+setStatus B COMPLETED
+setStatus C IN_DELIVERY
+setStatus D IN_DELIVERY
+getOldestOrderPerStatus
+getAllOrdersWithStatus IN_DELIVERY
+getAllOrdersWithStatus COMPLETED
+getAllOrdersWithStatus PROCESSING
 printOrders
