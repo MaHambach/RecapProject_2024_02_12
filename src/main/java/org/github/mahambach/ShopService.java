@@ -28,6 +28,7 @@ public class ShopService {
             int finalI = i;
             Product productToOrder = productRepo.getProductById(productIds.get(i)).orElseThrow(() -> new IllegalArgumentException("Product mit der Id: " + productIds.get(finalI) + " konnte nicht bestellt werden!"));
             try {
+                productRepo.changeStock(productToOrder.id(), -productQuantities.get(i));
                 products.add(productToOrder.withQuantity(productQuantities.get(i)));
             } catch (OutOfStockException e) {
                 System.out.println("Fehler: Nicht genügend '" + productToOrder.name() + "' auf Lager!");

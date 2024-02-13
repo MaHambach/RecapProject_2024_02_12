@@ -18,7 +18,7 @@ class ShopServiceTest {
         //GIVEN
         ShopService shopService = new ShopService();
         Product product = shopService.addProduct("Apfel", 5);
-        List<String> productsIds = List.of("1");
+        List<String> productsIds = List.of(product.id());
         List<Integer> productQuantities = List.of(5);
         //WHEN
         Order actual = shopService.addOrder(productsIds, productQuantities);

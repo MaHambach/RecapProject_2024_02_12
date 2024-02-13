@@ -24,7 +24,7 @@ public record Order(
                 LocalDateTime.ofInstant(orderDate, ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))
         );
         for (Product product : products) {
-            string += product.name() + ", ";
+            string += product.quantity() + "x "+ product.name() + ", ";
         }
         string = string.substring(0, string.length() - 2);
         string += "]}";

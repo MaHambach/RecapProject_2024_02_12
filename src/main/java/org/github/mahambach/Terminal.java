@@ -42,27 +42,29 @@ public class Terminal {
         String[] inputCommand = input.split(" ");
         switch (inputCommand[0]) {
             case "addProduct" -> {
-                // Der Input sollte die folgende Form haben: addProduct <productName> <quantity>
-                Product newProduct = shopService.addProduct(inputCommand[1], Integer.valueOf(inputCommand[2]));
-                System.out.println("Füge Produkt " + inputCommand[1] + " mit der ID " + newProduct.id() + " hinzu.");
+                // Der Input sollte die folgende Form haben: addProduct <productAlias> <productName> <quantity>
+                // Beispiel: addProduct p1 Buch 5
+                // Leerzeichen im Produktnamen müssen durch Unterstriche ersetzt werden.
+                Product newProduct = shopService.addProduct(inputCommand[2].replace("_", " "), Integer.valueOf(inputCommand[3]));
+                System.out.println("Füge Produkt '" + inputCommand[2] + "' mit der ID '" + inputCommand[1] + "' hinzu.");
                 productMapAliasToId.put(inputCommand[1], newProduct.id());
                 productMapIdToAlias.put(newProduct.id(), inputCommand[1]);
             }
             case "addOrder" -> {
-                // Der Input sollte die folgende Form haben: addOrder <orderId> <productId1> <productId2> ...
-                System.out.println(
-                        "Füge Bestellung \'"
-                                + inputCommand[1]
-                                + "\' mit den Produkten "
-                                + Arrays.asList(inputCommand).subList(2, inputCommand.length)
-                                + " hinzu."
-                );
+                // Der Input sollte die folgende Form haben: addOrder <orderAlias> <productId1> <quantity1> <productId2> <quantity2> ...
                 List<String> productIds = new ArrayList<>();
                 List<Integer> productQuantities = new ArrayList<>();
                 for (int i = 2; i < inputCommand.length; i=i+2) {
                     productIds.add(productMapAliasToId.get(inputCommand[i]));
-                    productQuantities.add(i+1);
+                    productQuantities.add(Integer.valueOf(inputCommand[i+1]));
                 }
+                System.out.println(
+                        "Füge Bestellung \'"
+                                + inputCommand[1]
+                                + "\' mit den Produkten "
+                                + productIds.stream().map(productMapIdToAlias::get).toList()
+                                + " hinzu."
+                );
                 Order newOrder = shopService.addOrder(productIds, productQuantities);
                 orderMapAliasToId.put(inputCommand[1], newOrder.id());
                 orderMapIdToAlias.put(newOrder.id(), inputCommand[1]);
@@ -72,7 +74,7 @@ public class Terminal {
                 System.out.println("Bestellungen mit Status " + inputCommand[1] + ":");
                 List<Order> orders = shopService.getAllOrdersWithStatus(OrderStatus.valueOf(inputCommand[1]));
                 for (Order order : orders) {
-                    System.out.println(order.withId(orderMapAliasToId.get(order.id())));
+                    System.out.println(order.withId(orderMapIdToAlias.get(order.id())));
                 }
             }
             case "getOldestOrderPerStatus" -> {

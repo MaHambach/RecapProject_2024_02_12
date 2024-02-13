@@ -56,7 +56,7 @@ public class ProductRepo {
             throw new OutOfStockException("Fehler: Nicht genügend '" + product.name() + "' auf Lager!");
         }
 
-        product = product.withQuantity(product.quantity() + change);
+        products.set(products.indexOf(product), product.withQuantity(product.quantity() + change));
 
         return product.quantity();
     }

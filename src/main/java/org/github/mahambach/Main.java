@@ -7,12 +7,6 @@ import org.github.mahambach.product.ProductRepo;
 public class Main {
     public static void main(String[] args) {
         ProductRepo productRepo = new ProductRepo();
-        productRepo.addProduct(new Product("1", "Buch", 5));
-        productRepo.addProduct(new Product("2", "Stift", 10));
-        productRepo.addProduct(new Product("3", "Hefter", 3));
-        productRepo.addProduct(new Product("4", "Locher", 2));
-        productRepo.addProduct(new Product("5", "Taschenrechner", 20));
-
         OrderMapRepo orderMapRepo = new OrderMapRepo();
         IdService idService = new IdService();
         ShopService shopService = new ShopService(productRepo, orderMapRepo, idService);
@@ -35,10 +29,14 @@ public class Main {
 //            System.out.printf("Älteste Bestellung mit Status %11s: %s%n", status, oldestOrderPerStatus.get(status));
 //        }
         Terminal terminal = new Terminal(shopService);
-        terminal.executeFromFile("src/transactions.txt");
+        //terminal.executeFromFile("src/transactions.txt");
+        terminal.executeFromFile("src/transactionsExtended.txt");
         System.out.println();
         System.out.println("Alle Bestellungen:");
         shopService.printOrders();
-        //shopService.readFromFile("src/transactions.txt");
+        System.out.println();
+        for(Product product : productRepo.getProducts()){
+            System.out.println(product);
+        }
     }
 }
