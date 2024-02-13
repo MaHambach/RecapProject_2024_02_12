@@ -5,14 +5,10 @@ import org.github.mahambach.order.Order;
 import org.github.mahambach.order.OrderMapRepo;
 import org.github.mahambach.order.OrderRepo;
 import org.github.mahambach.order.OrderStatus;
+import org.github.mahambach.product.OutOfStockException;
 import org.github.mahambach.product.Product;
 import org.github.mahambach.product.ProductRepo;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.*;
 
@@ -23,14 +19,25 @@ public class ShopService {
     private final OrderRepo orderRepo;
     private final IdService idService;
 
-    public Order addOrder(List<String> productIds) throws  IllegalArgumentException{
+    public Order addOrder(List<String> productIds, List<Integer> productQuantities) throws  IllegalArgumentException, OutOfStockException {
+        if(productIds.size() != productQuantities.size()) {
+            throw new IllegalArgumentException("Anzahl der Produkt-Ids stimmt nicht mit der Anzahl der Produktmengen überein!");
+        }
         List<Product> products = new ArrayList<>();
-        for (String productId : productIds) {
+        try {
+            for (int i = 0; i < productIds.size(); i++) {
+                Product productToOrder = productRepo.getProductById(productIds.get(i)).orElseThrow(() -> new IllegalArgumentException("Product mit der Id: " + productIds.get(i) + " konnte nicht bestellt werden!"));
+                products.add(productToOrder.withQuantity(productToOrder.quantity() - productQuantities.get(i)));
+            }
+        } catch (OutOfStockException e) {
+            throw new OutOfStockException("Fehler: Nicht genügend '" + productRepo.getProductById(productIds.get(0)).get().name() + "' auf Lager!");
+        }
             Optional<Product> productToOrder = productRepo.getProductById(productId);
             if (productToOrder.isEmpty()) {
                 throw new IllegalArgumentException("Product mit der Id: " + productId + " konnte nicht bestellt werden!");
             }
             products.add(productToOrder.get());
+
         }
 
         Order newOrder = new Order(idService.generateId().toString(), OrderStatus.PROCESSING, Instant.now(), products);
@@ -52,9 +59,8 @@ public class ShopService {
         orderRepo.updateOrder(orderID, status);
     }
 
-    public Product addProduct(String productName) {
-        // TODO: Hinzufügen von price und stock.
-        return productRepo.addProduct(new Product(idService.generateId().toString(), productName));
+    public Product addProduct(String productName, int quantity) {
+        return productRepo.addProduct(new Product(idService.generateId().toString(), productName, quantity));
     }
 
     public Map<OrderStatus, Order> getOldestOrderPerStatus() {

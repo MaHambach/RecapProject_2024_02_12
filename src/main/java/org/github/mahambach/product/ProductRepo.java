@@ -11,7 +11,6 @@ public class ProductRepo {
 
     public ProductRepo() {
         products = new ArrayList<>();
-        products.add(new Product("1", "Apfel"));
     }
 
     public List<Product> getProducts() {
@@ -39,5 +38,26 @@ public class ProductRepo {
                return;
            }
         }
+    }
+
+    public int getStock(String id) {
+        for (Product product : products) {
+            if (product.id().equals(id)) {
+                return product.quantity();
+            }
+        }
+        return 0;
+    }
+
+    public int changeStock(String id, int change) throws OutOfStockException{
+        Product product = getProductById(id).orElseThrow(() -> new OutOfStockException("Fehler: Produkt nicht gefunden!"));
+
+        if (product.quantity() + change < 0) {
+            throw new OutOfStockException("Fehler: Nicht genügend '" + product.name() + "' auf Lager!");
+        }
+
+        product = product.withQuantity(product.quantity() + change);
+
+        return product.quantity();
     }
 }

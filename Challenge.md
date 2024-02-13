@@ -92,7 +92,6 @@ Adds a new order. The order should contain the given product IDs. The order shou
 
 `addOrder <alias for order within file> <productId> [<productId> ...]`
 
-```
 Save the OrderID returned by the ShopService in a data structure (with the specified, freely selectable alias) so that you can later change the status of the order.
 
 ---
@@ -112,4 +111,3 @@ Prints all orders.
 ## Bonus: Quantity and Stock Levels
 
 Add a quantity to the products. When a product is ordered, the quantity of the product is decreased. If a product is out of stock, it cannot be ordered anymore. Allow decimal numbers as well. Also, extend the command processing with `transactions.txt` accordingly.
-```

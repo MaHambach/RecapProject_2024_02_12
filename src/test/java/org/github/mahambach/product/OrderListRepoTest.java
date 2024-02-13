@@ -1,3 +1,5 @@
+package org.github.mahambach.product;
+
 import org.github.mahambach.order.Order;
 import org.github.mahambach.order.OrderListRepo;
 import org.github.mahambach.order.OrderStatus;
@@ -17,7 +19,7 @@ class OrderListRepoTest {
         //GIVEN
         OrderListRepo repo = new OrderListRepo();
 
-        Product product = new Product("1", "Apfel");
+        Product product = new Product("1", "Apfel", 5);
         Order newOrder = new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product));
         repo.addOrder(newOrder);
 
@@ -26,7 +28,7 @@ class OrderListRepoTest {
 
         //THEN
         List<Order> expected = new ArrayList<>();
-        Product product1 = new Product("1", "Apfel");
+        Product product1 = new Product("1", "Apfel", 5);
         expected.add(new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product)));
 
         assertEquals(actual, expected);
@@ -37,7 +39,7 @@ class OrderListRepoTest {
         //GIVEN
         OrderListRepo repo = new OrderListRepo();
 
-        Product product = new Product("1", "Apfel");
+        Product product = new Product("1", "Apfel", 5);
         Order newOrder = new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product));
         repo.addOrder(newOrder);
 
@@ -45,7 +47,7 @@ class OrderListRepoTest {
         Order actual = repo.getOrderById("1");
 
         //THEN
-        Product product1 = new Product("1", "Apfel");
+        Product product1 = new Product("1", "Apfel", 5);
         Order expected = new Order("1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(product));
 
         assertEquals(actual, expected);
@@ -55,7 +57,7 @@ class OrderListRepoTest {
     void addOrder() {
         //GIVEN
         OrderListRepo repo = new OrderListRepo();
-        Product product = new Product("1", "Apfel");
+        Product product = new Product("1", "Apfel", 5);
         Instant now = Instant.now();
         Order newOrder = new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product));
 
@@ -63,7 +65,7 @@ class OrderListRepoTest {
         Order actual = repo.addOrder(newOrder);
 
         //THEN
-        Product product1 = new Product("1", "Apfel");
+        Product product1 = new Product("1", "Apfel", 5);
         Order expected = new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product));
         assertEquals(actual, expected);
         assertEquals(repo.getOrderById("1"), expected);
@@ -85,7 +87,7 @@ class OrderListRepoTest {
     void updateOrder() {
         //GIVEN
         OrderListRepo repo = new OrderListRepo();
-        Product product = new Product("1", "Apfel");
+        Product product = new Product("1", "Apfel", 5);
         Instant now = Instant.now();
         Order newOrder = new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product));
         repo.addOrder(newOrder);
@@ -94,7 +96,7 @@ class OrderListRepoTest {
         repo.updateOrder("1", OrderStatus.IN_DELIVERY);
 
         //THEN
-        Product product1 = new Product("1", "Apfel");
+        Product product1 = new Product("1", "Apfel", 5);
         Order expected = new Order("A", OrderStatus.IN_DELIVERY, now, List.of(product1));
         assertEquals(repo.getOrderById("1"), expected);
     }

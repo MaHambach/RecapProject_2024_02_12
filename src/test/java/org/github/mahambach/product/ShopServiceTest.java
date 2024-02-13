@@ -1,3 +1,5 @@
+package org.github.mahambach.product;
+
 import org.github.mahambach.order.Order;
 import org.github.mahambach.order.OrderStatus;
 import org.github.mahambach.product.Product;
@@ -21,7 +23,7 @@ class ShopServiceTest {
         Order actual = shopService.addOrder(productsIds);
 
         //THEN
-        Order expected = new Order("-1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(new Product("1", "Apfel")));
+        Order expected = new Order("-1", OrderStatus.IN_DELIVERY, Instant.now(), List.of(new Product("1", "Apfel", 5)));
         assertEquals(expected.products(), actual.products());
         assertNotNull(expected.id());
     }

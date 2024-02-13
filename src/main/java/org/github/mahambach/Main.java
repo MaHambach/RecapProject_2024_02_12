@@ -7,11 +7,11 @@ import org.github.mahambach.product.ProductRepo;
 public class Main {
     public static void main(String[] args) {
         ProductRepo productRepo = new ProductRepo();
-        productRepo.addProduct(new Product("1", "Buch"));
-        productRepo.addProduct(new Product("2", "Stift"));
-        productRepo.addProduct(new Product("3", "Hefter"));
-        productRepo.addProduct(new Product("4", "Locher"));
-        productRepo.addProduct(new Product("5", "Taschenrechner"));
+        productRepo.addProduct(new Product("1", "Buch", 5));
+        productRepo.addProduct(new Product("2", "Stift", 10));
+        productRepo.addProduct(new Product("3", "Hefter", 3));
+        productRepo.addProduct(new Product("4", "Locher", 2));
+        productRepo.addProduct(new Product("5", "Taschenrechner", 20));
 
         OrderMapRepo orderMapRepo = new OrderMapRepo();
         IdService idService = new IdService();
